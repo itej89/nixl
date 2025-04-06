@@ -16,23 +16,30 @@
 ucx_utils_dep = declare_dependency(link_with: ucx_utils_lib, include_directories: utils_inc_dirs )
 
 compile_flags = []
+gpu_dep = []
 if cuda_dep.found()
     compile_flags = [ '-DHAVE_CUDA' ]
+    gpu_dep += [cuda_dep]
+elif rocm_dep.found()
+    compile_flags = [ '-DHAVE_ROCM', '-D__HIP_PLATFORM_AMD__=1' ]
+    gpu_dep += [rocm_dep]
 endif
+
+
 
 if 'UCX' in static_plugins
     ucx_backend_lib = static_library('UCX',
                'ucx_backend.cpp', 'ucx_backend.h', 'ucx_plugin.cpp',
-               dependencies: [nixl_infra, ucx_utils_dep, serdes_interface, cuda_dep, ucx_dep],
-               include_directories: nixl_inc_dirs,
+               dependencies: [nixl_infra, ucx_utils_dep, serdes_interface, ucx_dep] + gpu_dep,
+               include_directories: [ nixl_inc_dirs, rocm_headers_dirs ],
                install: false,
                cpp_args : compile_flags,
                name_prefix: 'libplugin_')  # Custom prefix for plugin libraries
 else
     ucx_backend_lib = shared_library('UCX',
                'ucx_backend.cpp', 'ucx_backend.h', 'ucx_plugin.cpp',
-               dependencies: [nixl_infra, ucx_utils_dep, serdes_interface, cuda_dep, ucx_dep],
-               include_directories: [nixl_inc_dirs, utils_inc_dirs],
+               dependencies: [nixl_infra, ucx_utils_dep, serdes_interface, ucx_dep] + gpu_dep,
+               include_directories: [nixl_inc_dirs, utils_inc_dirs, rocm_headers_dirs ],
                install: true,
                cpp_args : compile_flags + ['-fPIC'],
                name_prefix: 'libplugin_',  # Custom prefix for plugin libraries

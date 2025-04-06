@@ -25,10 +25,20 @@
 //TODO: meson conditional build for CUDA
 //#define USE_VRAM
 
-#ifdef USE_VRAM
+#ifdef HAVE_CUDA
 
 #include <cuda_runtime.h>
 #include <cufile.h>
+
+#endif
+
+#ifdef HAVE_ROCM
+
+#include <cuda_shims.h>
+
+#endif
+
+#if defined(HAVE_CUDA) || defined(HAVE_ROCM)
 
 int gpu_id = 0;
 

@@ -18,6 +18,9 @@ ucx_backend_dep = declare_dependency(link_with: ucx_backend_lib, include_directo
 if cuda_dep.found()
     cuda_dependencies = [cuda_dep]
     cpp_args = '-DHAVE_CUDA'
+elif rocm_dep.found()
+    cuda_dependencies = [rocm_dep]
+    cpp_args = ['-DHAVE_ROCM', '-D__HIP_PLATFORM_AMD__=1']
 else
     cuda_dependencies = []
     cpp_args = '-UHAVE_CUDA'
@@ -26,13 +29,13 @@ endif
 ucx_backend_test = executable('ucx_backend_test',
         'ucx_backend_test.cpp',
         dependencies: [nixl_dep, nixl_infra, ucx_backend_dep, ucx_dep] + cuda_dependencies,
-        include_directories: [nixl_inc_dirs, utils_inc_dirs, '../../../../src/plugins/ucx'],
+        include_directories: [nixl_inc_dirs, utils_inc_dirs, '../../../../src/plugins/ucx', '../../../../src/plugins/rocm_headers'],
         cpp_args : cpp_args,
         install: true)
 
 ucx_backend_multi = executable('ucx_backend_multi',
            'ucx_backend_multi.cpp',
            dependencies: [nixl_dep, nixl_infra, ucx_backend_dep, ucx_dep] + cuda_dependencies,
-           include_directories: [nixl_inc_dirs, utils_inc_dirs, '../../../../src/plugins/ucx'],
+           include_directories: [nixl_inc_dirs, utils_inc_dirs, '../../../../src/plugins/ucx', '../../../../src/plugins/rocm_headers'],
            cpp_args : cpp_args,
            install: true)

@@ -16,6 +16,8 @@
 ucx_utils_dep = [ ucx_dep ]
 if cuda_dep.found()
     ucx_utils_dep += [ cuda_dep ]
+elif rocm_dep.found()
+    ucx_utils_dep += [ rocm_dep ]
 endif
 
 ucx_utils_lib = library('ucx_utils',

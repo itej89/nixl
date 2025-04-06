@@ -34,6 +34,16 @@ using namespace std;
 
 #include <cuda_runtime.h>
 
+#endif
+
+#ifdef HAVE_ROCM
+
+#include <cuda_shims.h>
+
+#endif
+
+#if defined(HAVE_CUDA) || defined(HAVE_ROCM)
+
 static uint32_t _getNumVramDevices()
 {
     cudaError_t result;
@@ -45,7 +55,6 @@ static uint32_t _getNumVramDevices()
         return n_vram_dev;
     }
 }
-
 
 #else
 

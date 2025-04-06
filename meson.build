@@ -24,9 +24,14 @@ project('nixl', 'CPP', version: '0.1.0',
 # set up some global vars for compiler, platform, configuration, etc.
 cpp = meson.get_compiler('cpp')
 
+gpu_backend = get_option('gpu_backend')
+
 cuda_inc_path = get_option('cudapath_inc')
 cuda_lib_path = get_option('cudapath_lib')
 cuda_stub_path = get_option('cudapath_stub')
+
+rocm_inc_path = get_option('rocmpath_inc')
+rocm_lib_path = get_option('rocmpath_lib')
 
 if cuda_lib_path == ''
     cuda_dep = dependency('cuda', required : false, modules : [ 'cudart', 'cuda' ])
@@ -39,6 +44,18 @@ else
     link_args : ['-L' + cuda_lib_path, '-L' + cuda_stub_path, '-lcuda', '-lcudart'],
     include_directories : include_directories(cuda_inc_path))
 endif
+
+
+if rocm_lib_path == ''
+    rocm_dep = dependency('hip', required : false, modules : [ 'hip' ])
+else
+    message('rocm lib path ', rocm_lib_path)
+    rocm_dep = declare_dependency(
+    link_args : ['-L' + rocm_lib_path, '-lhip'],
+    include_directories : include_directories(rocm_inc_path))
+endif
+
+
 
 prefix_path = get_option('prefix')
 prefix_inc = prefix_path + '/include'

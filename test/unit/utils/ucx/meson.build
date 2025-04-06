@@ -16,6 +16,10 @@
 ucx_utils_dep = [ ucx_dep ]
 if cuda_dep.found()
     ucx_utils_dep += [ cuda_dep ]
+    cpp_args = [ '-DHAVE_CUDA', '-DUSE_VRAM' ]
+elif rocm_dep.found()
+    ucx_utils_dep += [ rocm_dep ] 
+    cpp_args = ['-DHAVE_ROCM', '-D__HIP_PLATFORM_AMD__=1', '-DUSE_VRAM' ]
 endif
 
 if get_option('buildtype') != 'release'
@@ -34,20 +38,20 @@ if get_option('buildtype') != 'release'
                link_with: ucx_utils_lib,
                install: true)
 
-    if cuda_dep.found()
+    if cuda_dep.found() or rocm_dep.found()
         ucx_worker_cuda_bin = executable('ucx_worker_test_cuda',
                        'ucx_worker_test.cpp',
                        dependencies: ucx_utils_dep,
-                       include_directories: [nixl_inc_dirs,utils_inc_dirs],
-                       cpp_args : '-DUSE_VRAM',
+                       include_directories: [nixl_inc_dirs,utils_inc_dirs, '../../../../src/plugins/rocm_headers'],
+                       cpp_args : cpp_args,
                        link_with: ucx_utils_lib,
                        install: true)
 
         ucx_am_cuda_bin = executable('ucx_am_test_cuda',
                        'ucx_am_test.cpp',
                        dependencies: ucx_utils_dep,
-                       include_directories: [nixl_inc_dirs,utils_inc_dirs],
-                       cpp_args : '-DUSE_VRAM',
+                       include_directories: [nixl_inc_dirs,utils_inc_dirs, '../../../../src/plugins/rocm_headers'],
+                       cpp_args : cpp_args,
                        link_with: ucx_utils_lib,
                        install: true)
 

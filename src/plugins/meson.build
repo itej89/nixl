@@ -14,6 +14,7 @@
 # limitations under the License.
 
 ucx_backend_inc_dirs = include_directories('./ucx')
+rocm_headers_dirs = include_directories('./rocm_headers')
 
 subdir('ucx')
 subdir('ucx_mo')

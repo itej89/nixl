@@ -15,12 +15,19 @@
 
 nixl_lib_deps = [nixl_infra, serdes_interface]
 
+gpu_dep = [ ]
+if cuda_dep.found()
+    gpu_dep += [ cuda_dep ]
+elif rocm_dep.found()
+    gpu_dep += [ rocm_dep ]
+endif
+
 if 'UCX' in static_plugins
-    nixl_lib_deps += [ ucx_backend_interface, cuda_dep ]
+    nixl_lib_deps += [ ucx_backend_interface ] + gpu_dep
 endif
 
 if 'UCX_MO' in static_plugins
-    nixl_lib_deps += [ ucx_mo_backend_interface, cuda_dep ]
+    nixl_lib_deps += [ ucx_mo_backend_interface ] + gpu_dep
 endif
 
 

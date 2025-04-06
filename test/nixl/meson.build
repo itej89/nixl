@@ -18,6 +18,9 @@ ucx_backend_dep = declare_dependency(link_with: ucx_backend_lib, include_directo
 if cuda_dep.found()
     cuda_dependencies = [cuda_dep]
     cpp_args = '-DUSE_VRAM'
+elif rocm_dep.found()
+    cuda_dependencies = [rocm_dep]
+    cpp_args = '-DUSE_VRAM'
 else
     cuda_dependencies = []
     cpp_args = '-UUSE_VRAM'
@@ -44,6 +47,6 @@ nixl_ucx_app  = executable('nixl_test', 'nixl_test.cpp',
 
 plugin_test = executable('test_plugin',
                         'test_plugin.cpp',
-                        dependencies: [nixl_dep, cuda_dep],
+                        dependencies: [nixl_dep] + cuda_dependencies,
                         include_directories: [nixl_inc_dirs, utils_inc_dirs],
                         install: true)

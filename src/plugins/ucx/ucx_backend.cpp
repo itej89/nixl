@@ -25,6 +25,12 @@
 
 #endif
 
+#ifdef HAVE_ROCM
+
+#include <cuda_shims.h>
+
+#endif
+
 
 
 /****************************************
@@ -33,7 +39,7 @@
 
 class nixlUcxCudaCtx {
 public:
-#ifdef HAVE_CUDA
+#if defined(HAVE_CUDA) || defined(HAVE_ROCM)
     CUcontext pthrCudaCtx;
 
     nixlUcxCudaCtx() {
@@ -45,7 +51,7 @@ public:
     int cudaSetCtx();
 };
 
-#ifdef HAVE_CUDA
+#if defined(HAVE_CUDA) || defined(HAVE_ROCM)
 
 static int cudaQueryAddr(void *address, bool &is_dev,
                          CUdevice &dev, CUcontext &ctx)
