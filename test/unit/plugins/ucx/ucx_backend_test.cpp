@@ -597,7 +597,7 @@ int main()
 #if defined(HAVE_CUDA) || defined(HAVE_ROCM)
     int dev_ids[2] = { 0 , 0 };
     int n_vram_dev;
-    cudaGetDeviceCount(&n_vram_dev);
+    checkCudaError(cudaGetDeviceCount(&n_vram_dev), "Failed to get device count");
 
     std::cout << "Detected " << n_vram_dev << " CUDA devices" << std::endl;
     if (n_vram_dev > 1) {

@@ -19,7 +19,7 @@ if cuda_dep.found()
     cpp_args = [ '-DHAVE_CUDA', '-DUSE_VRAM' ]
 elif rocm_dep.found()
     ucx_utils_dep += [ rocm_dep ] 
-    cpp_args = ['-DHAVE_ROCM', '-D__HIP_PLATFORM_AMD__=1', '-DUSE_VRAM' ]
+    cpp_args = ['-DHAVE_ROCM', '-D__HIP_PLATFORM_AMD__=1', '-DUSE_VRAM', '-Wno-error=deprecated-declarations'  ]
 endif
 
 if get_option('buildtype') != 'release'

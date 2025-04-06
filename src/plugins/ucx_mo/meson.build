@@ -22,7 +22,7 @@ if cuda_dep.found()
     compile_flags = [ '-DHAVE_CUDA' ]
     gpu_dep += [cuda_dep]
 elif rocm_dep.found()
-    compile_flags = [ '-DHAVE_ROCM', '-D__HIP_PLATFORM_AMD__=1' ]
+    compile_flags = [ '-DHAVE_ROCM', '-D__HIP_PLATFORM_AMD__=1', '-Wno-error=deprecated-declarations'  ]
     gpu_dep += [rocm_dep]
 endif
 

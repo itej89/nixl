@@ -18,7 +18,7 @@
 #define cudaMemcpyDeviceToHost hipMemcpyDeviceToHost
 #define cudaMemcpyDeviceToHost hipMemcpyDeviceToHost
 
-#define cuPointerGetAttributes hipPointerGetAttributes
+#define cuPointerGetAttributes hipDrvPointerGetAttributes
 #define CUpointer_attribute hipPointer_attribute
 
 
@@ -36,6 +36,9 @@
 #define  CU_MEMORYTYPE_DEVICE hipMemoryTypeDevice
 
 #define CUdeviceptr hipDeviceptr_t
+#define CUdevice int
+
+#define CUcontext hipCtx_t
 
 #define cuCtxSetCurrent hipCtxSetCurrent
 

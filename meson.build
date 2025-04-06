@@ -51,7 +51,7 @@ if rocm_lib_path == ''
 else
     message('rocm lib path ', rocm_lib_path)
     rocm_dep = declare_dependency(
-    link_args : ['-L' + rocm_lib_path, '-lhip'],
+    link_args : ['-L' + rocm_lib_path, '-lhiprtc', '-lhiprtc-builtins', '-lamdhip64'],
     include_directories : include_directories(rocm_inc_path))
 endif
 

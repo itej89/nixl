@@ -21,7 +21,7 @@ if cuda_dep.found()
     cpp_args = '-DHAVE_CUDA'
 elif rocm_dep.found()
     cuda_dependencies = [rocm_dep]
-    cpp_args = ['-DHAVE_ROCM', '-D__HIP_PLATFORM_AMD__=1']
+    cpp_args = ['-DHAVE_ROCM', '-D__HIP_PLATFORM_AMD__=1', '-Wno-error=deprecated-declarations' ]
 else
     cuda_dependencies = []
     cpp_args = '-UHAVE_CUDA'
